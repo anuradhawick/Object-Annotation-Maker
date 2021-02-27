@@ -29,6 +29,13 @@ You can use the following command to obtain the available parameters.
 ```
 
 ```
+usage: Make.py [-h] --images IMAGES [IMAGES ...] --backgrounds BACKGROUNDS
+               [BACKGROUNDS ...] [--remove-backgrounds] [--crop-whites]
+               [--resize-images H,W or H] [--resize-backgrounds H,W or H]
+               [--resize-ratio 0.5 or 0.2-0.6] [--target-size TARGET_SIZE]
+               [--n-images [0-100]] [--n-objects 1,100] [--seed SEED]
+               [--threads THREADS] --output OUTPUT
+
 Object Annotation Maker.
 
 This programs enables the creation of bounding boxes with backgrounds for object images.
@@ -50,10 +57,10 @@ optional arguments:
                         Not required if you have PNG images without backgrounds.
   --crop-whites, -c     Whether to crop out the white margins from images. 
                         Not required if you have PNG images without backgrounds.
-  --resize-images RESIZE_IMAGES, -ri RESIZE_IMAGES
-                        Convert input images to size before proceeding. Format H,W in pixels without spaces.
-  --resize-backgrounds RESIZE_BACKGROUNDS, -rb RESIZE_BACKGROUNDS
-                        Convert background images to size before proceeding. Format H,W in pixels without spaces.
+  --resize-images H,W or H, -ri H,W or H
+                        Convert input images to size before proceeding. Format H,W in pixels without spaces. Or specify only height for scaled resize.
+  --resize-backgrounds H,W or H, -rb H,W or H
+                        Convert background images to size before proceeding. Format H,W in pixels without spaces. Or specify only height for scaled resize.
   --resize-ratio 0.5 or 0.2-0.6, -rr 0.5 or 0.2-0.6
                         Ratio of object to background. 
                         Use a range or a single value. Overrides resize-image and resize-backgroud options.

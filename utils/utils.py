@@ -38,8 +38,14 @@ def remove_background(image):
 
 def resize_image(image, width, height):
     img = image
-    dim = (width, height)
+    img_shape = image.shape
+
+    if width is None:
+        ratio = height/img_shape[0]
+        width = int(img_shape[1] * ratio)
     
+    dim = (width, height)
+
     # resize image
     resized = cv2.resize(img, dim, interpolation = cv2.INTER_AREA)
 
@@ -159,7 +165,6 @@ def generate_annotation_fixed_size(images, backgrounds, images_per_object, objec
             # randomly pick a background
             background = random.choice(backgrounds)
             exec_args.append([image, background, objects_per_image, output, n])
-            # executor.submit(place_objects, image, background, objects_per_image, output, n)
 
     for itr in tqdm(executor.map(lambda p: place_objects(*p), exec_args), total=len(exec_args), desc="Generating images."):
         pass

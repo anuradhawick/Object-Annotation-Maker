@@ -74,8 +74,13 @@ def run_maker(
             
             # resize all images
             exec_args = []
+
             if resize_images is not None:
-                height, width = list(map(int, resize_images.strip().split(",")))
+                if "," in resize_images:
+                    height, width = list(map(int, resize_images.strip().split(",")))
+                else:
+                    height = int(resize_images.strip())
+                    width = None
             else:
                 height, width = None, None
 
@@ -89,6 +94,12 @@ def run_maker(
                 pass
 
         if resize_backgrounds:
+            if "," in resize_images:
+                height, width = list(map(int, resize_backgrounds.strip().split(",")))
+            else:
+                height = int(resize_backgrounds.strip())
+                width = None
+                
             executor = concurrent.futures.ThreadPoolExecutor(max_workers=threads)
 
             def thread_function(input_image, width, height, out_path):
@@ -99,7 +110,6 @@ def run_maker(
 
             # resize all backgrounds
             exec_args = []
-            height, width = list(map(int, resize_backgrounds.strip().split(",")))
             
             for n in range(len(input_backgrounds)):
                 out_path = f"{output}/tmp/bg/img_{n}.png"

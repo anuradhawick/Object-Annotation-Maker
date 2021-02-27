@@ -30,14 +30,16 @@ def main():
     parser.add_argument('--resize-images', "-ri",
                         type=str,
                         required=False,
-                        help="""Convert input images to size before proceeding. Format H,W in pixels without spaces.""",
+                        help="""Convert input images to size before proceeding. Format H,W in pixels without spaces. Or specify only height for scaled resize.""",
+                        metavar="H,W or H",
                         default=None
                         )
 
     parser.add_argument('--resize-backgrounds', "-rb",
                         type=str,
                         required=False,
-                        help="""Convert background images to size before proceeding. Format H,W in pixels without spaces.""",
+                        help="""Convert background images to size before proceeding. Format H,W in pixels without spaces. Or specify only height for scaled resize.""",
+                        metavar="H,W or H",
                         default=None)
 
     parser.add_argument('--resize-ratio', "-rr",
