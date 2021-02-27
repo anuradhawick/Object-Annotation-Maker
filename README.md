@@ -81,9 +81,9 @@ optional arguments:
 ```
 
 # Notes
-* Image generation with rations is still under consideration/experimentation. If the utility seems effective it will be immediately rolled out. Or it will be available eventually.
+* Image generation with ratios is still under consideration/experimentation. If the utility seems effective it will be immediately rolled out. Or it will be available eventually. Ping me with an issue if it is urgent!
 
-* Verification of annotations can be done using the following tool
+* Verification of annotations can be done using the following tool *if needed*
     ```
     https://github.com/zchrissirhcz/imageset-viewer
     ```
