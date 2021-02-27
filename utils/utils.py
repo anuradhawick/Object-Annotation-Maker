@@ -72,7 +72,12 @@ def image_loader(image_paths):
 # https://stackoverflow.com/questions/14063070/overlay-a-smaller-image-on-a-larger-image-python-opencv
 def overlay_image(background_image, object_image, loc_0, loc_1):
     background_image = background_image.copy()
-    alpha_object_image = object_image[:, :, 3] / 255.0
+    
+    if object_image.shape[2] == 4:
+        alpha_object_image = object_image[:, :, 3] / 255.0
+    else:
+        alpha_object_image = 1
+
     alpha_background_image = 1.0 - alpha_object_image
     y1, y2 = loc_0, loc_0 + object_image.shape[0]
     x1, x2 = loc_1, loc_1 + object_image.shape[1]

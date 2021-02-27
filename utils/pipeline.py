@@ -56,45 +56,59 @@ def run_maker(
             ratios = [float(resize_ratio.strip())]
 
 
+    else:
+        if resize_images or should_remove_backgrounds:
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=threads)
+            
+            def thread_function(input_image, width, height, out_path):
+                image = utils.read_image(input_image)
+                
+                if resize_images is not None:
+                    image = utils.resize_image(image, width, height)
 
-    elif resize_images or resize_backgrounds:
-        executor = concurrent.futures.ThreadPoolExecutor(max_workers=threads)
+                # remove all backgrounds
+                if should_remove_backgrounds:
+                    image = utils.remove_background(image)
+
+                utils.save_image(out_path, image)
+            
+            # resize all images
+            exec_args = []
+            if resize_images is not None:
+                height, width = list(map(int, resize_images.strip().split(",")))
+            else:
+                height, width = None, None
+
+            for n in range(len(input_images)):
+                object_name = os.path.dirname(input_images[n]).split("/")[-1].lower()
+                out_path = f"{output}/tmp/obj/{object_name}/img_{n}.png"
+                exec_args.append((str(input_images[n]), width, height, out_path))
+                input_images[n] = out_path
+            
+            for itr in tqdm(executor.map(lambda p: thread_function(*p), exec_args), total=len(input_images), desc="Processing images."):
+                pass
+
+        if resize_backgrounds:
+            executor = concurrent.futures.ThreadPoolExecutor(max_workers=threads)
+
+            def thread_function(input_image, width, height, out_path):
+                image = utils.read_image(input_image)
+                image = utils.resize_image(image, width, height)
+
+                utils.save_image(out_path, image)
+
+            # resize all backgrounds
+            exec_args = []
+            height, width = list(map(int, resize_backgrounds.strip().split(",")))
+            
+            for n in range(len(input_backgrounds)):
+                out_path = f"{output}/tmp/bg/img_{n}.png"
+                exec_args.append((str(input_backgrounds[n]), width, height, out_path))
+                input_backgrounds[n] = out_path
+
+            for itr in tqdm(executor.map(lambda p: thread_function(*p), exec_args), total=len(input_backgrounds), desc="Resizing backgrounds."):
+                pass
+            
+            executor.shutdown(wait=True)
         
-        def thread_function(input_image, width, height, out_path):
-            image = utils.read_image(input_image)
-            image = utils.resize_image(image, width, height)
-
-            # remove all backgrounds
-            if should_remove_backgrounds:
-                image = utils.remove_background(image)
-
-            utils.save_image(out_path, image)
-        
-        # resize all images
-        exec_args = []
-        height, width = list(map(int, resize_images.strip().split(",")))
-
-        for n in range(len(input_images)):
-            object_name = os.path.dirname(input_images[n]).split("/")[-1].lower()
-            out_path = f"{output}/tmp/obj/{object_name}/img_{n}.png"
-            exec_args.append((str(input_images[n]), width, height, out_path))
-            input_images[n] = out_path
-        
-        for itr in tqdm(executor.map(lambda p: thread_function(*p), exec_args), total=len(input_images), desc="Resizing images."):
-            pass
-
-
-        # resize all backgrounds
-        exec_args = []
-        height, width = list(map(int, resize_backgrounds.strip().split(",")))
-        
-        for n in range(len(input_backgrounds)):
-            out_path = f"{output}/tmp/bg/img_{n}.png"
-            exec_args.append((str(input_backgrounds[n]), width, height, out_path))
-            input_backgrounds[n] = out_path
-
-        for itr in tqdm(executor.map(lambda p: thread_function(*p), exec_args), total=len(input_backgrounds), desc="Resizing backgrounds."):
-            pass
-        
-        executor.shutdown(wait=True)
         utils.generate_annotation_fixed_size(input_images, input_backgrounds, n_images, n_objects, seed, threads, output)
