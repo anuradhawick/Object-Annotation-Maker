@@ -86,6 +86,8 @@ optional arguments:
     https://github.com/zchrissirhcz/imageset-viewer
     ```
 
+* TODO for non overlapping images/ percentage of overlapping images
+
 # Showcase
 
 ![sample.jpg](sample.png)
