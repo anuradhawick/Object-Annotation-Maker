@@ -2,6 +2,8 @@
 
 It is often easier to capture objects as they are with a removable background. However, annotating objects is quite tedious and time consuming. In fact, can be expensive for researchers and students. This project was started with the intention of enabling researchers to use backgrounds and object images to generate annotated images with Pascal VOC format. 
 
+Read this blog if you're interesting: [Medium Blog](https://anuradhawick.medium.com/annotator-for-object-detection-950fd799b651)
+
 ## Usage
 
 Code needs to be dowloaded first. Be sure to install the following dependencies if you do not have them already.
